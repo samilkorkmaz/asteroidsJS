@@ -30,6 +30,8 @@ function sound(src) {
 const soundFire = new sound("fire.mp3");
 const soundAsteroidHit = new sound("asteroidHit.mp3");
 const soundShipHit = new sound("shipHit.mp3");
+const soundYouWin = new sound("youWin.mp3");
+const soundYouLoose = new sound("youLoose.mp3");
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -259,6 +261,7 @@ function Render() {
     // If no lives signal game over
     if(lives <= 0){
         showTextOnScreen("GAME OVER", canvasWidth / 2 - 150, canvasHeight / 2, '50px Arial');
+        soundYouLoose.play();
         return;
     } else if (killed) {
         showTextOnScreen("You got hit. Lives = " + lives + ". Press enter...", canvasWidth / 2 - 350, canvasHeight / 2, '50px Arial');
@@ -292,6 +295,7 @@ function Render() {
     } else {
         showTextOnScreen("YOU WIN!", canvasWidth / 2 - 150, canvasHeight / 2, '50px Arial');
         showTextOnScreen("Refresh page to restart game.", canvasWidth / 2 - 350, canvasHeight / 2 + 50, '50px Arial');
+        soundYouWin.play();
         return;
     }
 
@@ -321,7 +325,7 @@ function Render() {
         
     ship.Update();
     ship.Draw();
-    
+
     if(bullets.length !== 0) {
         for (let i = 0; i < bullets.length; i++) {
             bullets[i].Update();
