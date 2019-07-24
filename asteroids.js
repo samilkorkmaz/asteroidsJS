@@ -259,7 +259,8 @@ function Render() {
 
     // If no lives signal game over
     if(lives <= 0){
-        showTextOnScreen("GAME OVER", canvasWidth / 2 - 150, canvasHeight / 2, '50px Arial');
+        showTextOnScreen("GAME OVER", canvasWidth / 2 - 180, canvasHeight / 2, '50px Arial');
+        showTextOnScreen("Refresh page to restart game.", canvasWidth / 2 - 350, canvasHeight / 2 + 50, '50px Arial');
         soundYouLoose.play();
         return;
     } else if (killed) {
