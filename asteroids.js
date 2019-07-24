@@ -256,8 +256,7 @@ function DrawLifeShips(){
 function Render() {
     clearScreen();
     showTextOnScreen('SCORE: ' + score.toString(), 20, 35, "21px Arial");
-
-    // If no lives signal game over
+    // If no lives left, signal game over
     if(lives <= 0){
         showTextOnScreen("GAME OVER", canvasWidth / 2 - 180, canvasHeight / 2, '50px Arial');
         showTextOnScreen("Refresh page to restart game.", canvasWidth / 2 - 350, canvasHeight / 2 + 50, '50px Arial');
