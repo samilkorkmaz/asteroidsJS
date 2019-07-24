@@ -27,7 +27,6 @@ function sound(src) {
       this.sound.pause();
     }
 }
-const soundFire = new sound("fire.mp3");
 const soundAsteroidHit = new sound("asteroidHit.mp3");
 const soundShipHit = new sound("shipHit.mp3");
 const soundYouWin = new sound("youWin.mp3");
@@ -60,7 +59,7 @@ function SetupCanvas() {
                 Render();
             } 
             if(lives > 0){
-                soundFire.play();
+                new sound("fire.mp3").play();
             }
             bullets.push(new Bullet(ship.yaw_deg));
             
