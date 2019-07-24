@@ -69,7 +69,6 @@ function SetupCanvas() {
 
 class Ship {
     constructor(){
-        this.visible = true;
         this.x = canvasWidth/2;
         this.y = canvasHeight/2;
         this.movingForward = false;
@@ -143,7 +142,6 @@ class Ship {
 
 class Bullet {
     constructor(yaw_deg) {
-        this.visible = true;
         this.x = ship.noseX;
         this.y = ship.noseY;
         this.yaw_deg = yaw_deg;
@@ -164,7 +162,6 @@ class Bullet {
 
 class Asteroid {
     constructor(x, y, radius, level, collisionRadius) {
-        this.visible = true;
         this.x = x || Math.floor(Math.random()*canvasWidth);
         this.y = y || Math.floor(Math.random()*canvasHeight);
         //Make sure no asteroid spawns near ship spawn location
@@ -261,7 +258,6 @@ function Render() {
 
     // If no lives signal game over
     if(lives <= 0){
-        ship.visible = false;
         showTextOnScreen("GAME OVER", canvasWidth / 2 - 150, canvasHeight / 2, '50px Arial');
         return;
     } else if (killed) {
@@ -322,11 +318,10 @@ function Render() {
             }      
         }
     }
+        
+    ship.Update();
+    ship.Draw();
     
-    if(ship.visible) {
-        ship.Update();
-        ship.Draw();
-    }
     if(bullets.length !== 0) {
         for (let i = 0; i < bullets.length; i++) {
             bullets[i].Update();
