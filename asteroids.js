@@ -1,7 +1,7 @@
 //Reference: "Make JavaScript Asteroids in One Video", Derek Banas, https://www.youtube.com/watch?v=HWuU5ly0taA
 const canvasWidth = 1400;
 const canvasHeight = 900;
-const nbOfAsteroids = 1;
+const nbOfAsteroids = 8;
 
 let canvas;
 let ctx;
@@ -31,6 +31,8 @@ const soundAsteroidHit = new sound("asteroidHit.mp3");
 const soundShipHit = new sound("shipHit.mp3");
 const soundYouWin = new sound("youWin.mp3");
 const soundYouLoose = new sound("youLoose.mp3");
+const soundMainRocket = new sound("mainRocket.mp3");
+const soundSideRocket = new sound("sideRocket.mp3");
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -311,11 +313,21 @@ function Render() {
     ship.movingForward = keys[87]; //87 = w
     ship.turnRight = keys[68];
     ship.turnLeft = keys[65];
-    if (ship.turnRight) { //68 = d
-        ship.Rotate(1); //turn right
+    if(ship.movingForward) {
+        soundMainRocket.play();
+    } else {
+        soundMainRocket.stop();
     }
+    if (ship.turnRight) { //68 = d
+        soundSideRocket.play();
+        ship.Rotate(1); //turn right
+    } 
     if (ship.turnLeft) { //65 = a
+        soundSideRocket.play();
         ship.Rotate(-1); //turn left
+    } 
+    if(!ship.turnLeft && !ship.turnRight) {
+        soundSideRocket.stop();
     }
     if (asteroids.length !== 0) {
         for (let i = 0; i < asteroids.length; i++) {
