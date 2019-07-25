@@ -70,6 +70,10 @@ function SetupCanvas() {
     Render();
 }
 
+function deg2rad(angle_deg) {
+    return angle_deg * Math.PI/180;
+}
+
 class Ship {
     constructor() {
         this.x = canvasWidth / 2;
@@ -94,7 +98,7 @@ class Ship {
     }
 
     Update() {
-        let yaw_rad = this.yaw_deg * Math.PI / 180;
+        let yaw_rad = deg2rad(this.yaw_deg);
         if (this.movingForward) {
             this.velX += this.speed * Math.cos(yaw_rad);
             this.velY += this.speed * Math.sin(yaw_rad);
@@ -142,7 +146,7 @@ class Ship {
     }
 
     Draw() {
-        let yaw_rad = this.yaw_deg * Math.PI / 180;
+        let yaw_rad = deg2rad(this.yaw_deg);
         this.noseX = this.x - this.radius;
         this.noseY = this.y;
         ctx.translate(this.noseX, this.noseY);
@@ -193,7 +197,7 @@ class Bullet {
         this.speed = 7;
     }
     Update() {
-        let yaw_rad = this.yaw_deg * Math.PI / 180;
+        let yaw_rad = deg2rad(this.yaw_deg);
         this.x -= this.speed * Math.cos(yaw_rad);
         this.y -= this.speed * Math.sin(yaw_rad);
     }
@@ -208,7 +212,8 @@ class Asteroid {
         this.x = x || Math.floor(Math.random() * canvasWidth);
         this.y = y || Math.floor(Math.random() * canvasHeight);
         //Make sure no asteroid spawns near ship spawn location
-        if (Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius && Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius) {
+        if (Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius && 
+            Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius) {
             console.log("Asteroid near ship spawn location, changing x to zero");
             this.x = 0;
         }
@@ -221,7 +226,7 @@ class Asteroid {
         this.level = level || 1;
     }
     Update() {
-        let yaw_rad = Math.PI / 180 * this.yaw_deg;
+        let yaw_rad = deg2rad(this.yaw_deg);
         this.x += Math.cos(yaw_rad) * this.speed;
         this.y += Math.sin(yaw_rad) * this.speed;
         if (this.x < this.radius) {
@@ -242,7 +247,7 @@ class Asteroid {
         ctx.beginPath();
         ctx.strokeStyle = this.strokeColor;
         let vertAngle_rad = 2 * Math.PI / this.numberOfSides;
-        let yaw_rad = Math.PI / 180 * this.yaw_deg;
+        let yaw_rad = deg2rad(this.yaw_deg);
         for (let i = 0; i < this.numberOfSides; i++) {
             ctx.lineTo(this.x - this.radius * Math.cos(vertAngle_rad * i + yaw_rad),
                 this.y - this.radius * Math.sin(vertAngle_rad * i + yaw_rad));
