@@ -1,7 +1,7 @@
 //Reference: "Make JavaScript Asteroids in One Video", Derek Banas, https://www.youtube.com/watch?v=HWuU5ly0taA
 const canvasWidth = 1400;
 const canvasHeight = 900;
-const nbOfAsteroids = 8;
+const nbOfAsteroids = 1;
 
 let canvas;
 let ctx;
@@ -71,7 +71,7 @@ function SetupCanvas() {
 }
 
 function deg2rad(angle_deg) {
-    return angle_deg * Math.PI/180;
+    return angle_deg * Math.PI / 180;
 }
 
 class Ship {
@@ -121,22 +121,42 @@ class Ship {
         this.y -= this.velY;
     }
 
-    DrawThrust(thrustLength, thrustWidth, isForwardThrust, isLeftThrust) {
-        //forward thrust is default
-        let x0 = this.noseX + this.radius;
-        let x1 = x0 + thrustLength;
+    DrawSideThrust(thrustLength, thrustWidth, isLeftThrust) {
         let hOffset = 0;
-        if (!isForwardThrust) {
-            x0 = this.noseX + 0.75*this.radius;
-            x1 = x0 + thrustLength;
-            if (isLeftThrust) {
-                hOffset = this.radius/2;
-            } else { //right thrust
-                hOffset = -this.radius/2;
-            }
+        if (isLeftThrust) {
+            hOffset = this.radius / 2;
+        } else { //right thrust
+            hOffset = -this.radius / 2;
         }
+        //thrust 1
+        let x0 = this.noseX + 0.75 * this.radius;
+        let x1 = x0 + thrustLength;
         let y0 = this.noseY - thrustWidth / 2 + hOffset;
         let y1 = this.noseY + thrustWidth / 2 + hOffset;
+        let grd = ctx.createLinearGradient(x0, y0, x1, y1);
+        grd.addColorStop(0, "red");
+        grd.addColorStop(0.5, "yellow");
+        grd.addColorStop(1, "black");
+        ctx.fillStyle = grd;
+        ctx.fillRect(x0, y0, thrustLength, thrustWidth);
+        //thrust 2
+        x0 = this.noseX + 0.75 * this.radius - thrustLength;
+        x1 = x0 + thrustLength;
+        y0 = this.noseY - thrustWidth / 2 - hOffset;
+        y1 = this.noseY + thrustWidth / 2 - hOffset;
+        grd = ctx.createLinearGradient(x0, y0, x1, y1);
+        grd.addColorStop(0, "black");
+        grd.addColorStop(0.5, "yellow");
+        grd.addColorStop(1, "red");
+        ctx.fillStyle = grd;
+        ctx.fillRect(x0, y0, thrustLength, thrustWidth);
+    }
+
+    DrawForwardThrust(thrustLength, thrustWidth) {
+        let x0 = this.noseX + this.radius;
+        let x1 = x0 + thrustLength;
+        let y0 = this.noseY - thrustWidth / 2;
+        let y1 = this.noseY + thrustWidth / 2;
         let grd = ctx.createLinearGradient(x0, y0, x1, y1);
         grd.addColorStop(0, "red");
         grd.addColorStop(0.5, "yellow");
@@ -149,9 +169,9 @@ class Ship {
         let yaw_rad = deg2rad(this.yaw_deg);
         this.noseX = this.x - this.radius;
         this.noseY = this.y;
-        ctx.translate(this.noseX, this.noseY);
+        ctx.translate(this.noseX + this.radius / 2, this.noseY); //center of rotation is at radius/2
         ctx.rotate(yaw_rad);
-        ctx.translate(-this.noseX, -this.noseY);
+        ctx.translate(-this.noseX - this.radius / 2, -this.noseY);
         //Draw ship lines
         ctx.strokeStyle = this.strokeColor;
         ctx.beginPath();
@@ -174,13 +194,13 @@ class Ship {
         ctx.fill();
         //Draw thrust vectors
         if (this.movingForward) {
-            this.DrawThrust(50, 4, true, false);
+            this.DrawForwardThrust(50, 4);
         }
         if (this.turnLeft) {
-            this.DrawThrust(30, 4, false, false);
+            this.DrawSideThrust(30, 4, false);
         }
         if (this.turnRight) {
-            this.DrawThrust(30, 4, false, true);
+            this.DrawSideThrust(30, 4, true);
         }
         // Reset transformation matrix to the identity matrix
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -212,7 +232,7 @@ class Asteroid {
         this.x = x || Math.floor(Math.random() * canvasWidth);
         this.y = y || Math.floor(Math.random() * canvasHeight);
         //Make sure no asteroid spawns near ship spawn location
-        if (Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius && 
+        if (Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius &&
             Math.abs(this.x - canvasWidth / 2) < 2 * ship.radius) {
             console.log("Asteroid near ship spawn location, changing x to zero");
             this.x = 0;
@@ -318,7 +338,7 @@ function Render() {
     ship.movingForward = keys[87]; //87 = w
     ship.turnRight = keys[68];
     ship.turnLeft = keys[65];
-    if(ship.movingForward) {
+    if (ship.movingForward) {
         soundMainRocket.play();
     } else {
         soundMainRocket.stop();
@@ -326,12 +346,12 @@ function Render() {
     if (ship.turnRight) { //68 = d
         soundSideRocket.play();
         ship.Rotate(1); //turn right
-    } 
+    }
     if (ship.turnLeft) { //65 = a
         soundSideRocket.play();
         ship.Rotate(-1); //turn left
-    } 
-    if(!ship.turnLeft && !ship.turnRight) {
+    }
+    if (!ship.turnLeft && !ship.turnRight) {
         soundSideRocket.stop();
     }
     if (asteroids.length !== 0) {
