@@ -1,7 +1,7 @@
 //Reference: "Make JavaScript Asteroids in One Video", Derek Banas, https://www.youtube.com/watch?v=HWuU5ly0taA
 const canvasWidth = 1400;
 const canvasHeight = 900;
-const nbOfAsteroids = 1;
+const nbOfAsteroids = 8;
 
 let canvas;
 let ctx;
