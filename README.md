@@ -1,5 +1,5 @@
 # asteroids
-Asteroids game made with JavaScript. Modified from [Make JavaScript Asteroids in One Video](https://www.youtube.com/watch?v=HWuU5ly0taA) by Derek Banas.
+[Asteroids game](https://en.wikipedia.org/wiki/Asteroids_(video_game)) made with JavaScript. Modified from [Make JavaScript Asteroids in One Video](https://www.youtube.com/watch?v=HWuU5ly0taA) by Derek Banas.
 
 Final result [video](https://www.youtube.com/watch?v=JSNKm2FWqp0&ab_channel=%C5%9EamilKorkmaz).
 
